@@ -10,12 +10,22 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Mq_cAb.py" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Mq_cAb.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/primal_dual_path_fm/Mq_cAb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="704">
-              <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+            <state relative-caret-position="298">
+              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="artProb_init.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/primal_dual_path_fm/artProb_init.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="264">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -34,6 +44,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/primal_dual_path_fm/Mq_cAb.py" />
+        <option value="$PROJECT_DIR$/primal_dual_path_fm/artProb_init.py" />
       </list>
     </option>
   </component>
@@ -80,6 +91,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -96,22 +109,21 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="fileTemplates" />
-    <property name="last_opened_file_path" value="C:/ProgramData/Anaconda3/envs/tf/python.exe" />
+    <property name="settings.editor.selected.configurable" value="PyConsoleConfigurable.Python Console" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
-      <console-settings sdk-home="C:\ProgramData\Anaconda3\envs\tf\python.exe" working-directory="$PROJECT_DIR$/..">
+      <console-settings module-name="optimization" sdk-home="C:\ProgramData\Anaconda3\envs\tf\python.exe" working-directory="$PROJECT_DIR$/..">
         <envs>
           <env key="GOOGLE_APPLICATION_CREDENTIALS" value="C:\Users\Maxwell\GCP\Maxwell1-1a75796d7ff7.json" />
           <env key="PATH" value="C:\ProgramData\Anaconda3\envs\tf;C:\Program Files\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;C:\Users\Maxwell\Desktop\Git_clone\LightGBM\python-package\lightgbm" />
         </envs>
         <option name="mySdkHome" value="C:\ProgramData\Anaconda3\envs\tf\python.exe" />
+        <option name="myModuleName" value="optimization" />
         <option name="myEnvs">
           <map>
             <entry key="GOOGLE_APPLICATION_CREDENTIALS" value="C:\Users\Maxwell\GCP\Maxwell1-1a75796d7ff7.json" />
@@ -194,8 +206,24 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/primal_dual_path_fm/Mq_cAb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/primal_dual_path_fm/Mq_cAb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/primal_dual_path_fm/artProb_init.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding />
         </state>
       </provider>
