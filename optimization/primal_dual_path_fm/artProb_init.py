@@ -24,6 +24,10 @@ def artProb_init(M, q):
     xx0 = np.vstack([x0, np.array([[1]])])
     zz0 = np.vstack([z0, mu0])
 
+    # MM : ( n + 1 ) x ( n + 1 )
+    # qq : ( n + 1 ) x 1
+    # xx0 : ( n + 1 ) x 1
+    # zz0 : ( n + 1 ) x 1
     return MM, qq, xx0, zz0
 
 

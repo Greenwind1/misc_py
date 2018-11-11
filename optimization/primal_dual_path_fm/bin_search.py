@@ -16,6 +16,7 @@ def bin_search(x, z, dx, dz, beta=0.5, precision=0.001):
     th_low = 0
     th_high = 1
 
+    # erro occured
     if (dx < 0).sum() > 0 or (dz < 0).sum() > 0:
         th_high = min(th_high,
                       np.min(-x[dx < 0] / dx[dx < 0]),
