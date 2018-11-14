@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from primal_dual_path_fm.Mq_cAb import Mq_cAb
 
 
 def artProb_init(M, q):
@@ -32,7 +33,9 @@ def artProb_init(M, q):
 
 
 if __name__ == '__main__':
-    M = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    q = np.array([[0], [0], [0]])
+    c = np.array([[150], [200], [300]])
+    A = np.array([[3, 1, 2], [1, 3, 0], [0, 2, 4]])
+    b = np.array([[60], [36], [48]])
+    M, q = Mq_cAb(c, A, b)
     MM, qq, xx0, zz0 = artProb_init(M, q)
     print(MM, qq, xx0, zz0)

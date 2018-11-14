@@ -27,8 +27,8 @@ def pdpfm(c, A, b, beta=0.5, precision=0.001, MEPS=1e-10):
         dz = delta * mu * (1 / x) - z - (1 / x) * z * dx
         th = bin_search(x, z, dx, dz, beta, precision)
         print('theta = {:.5f}'.format(th), end=' , ')
-        x += dx
-        z += dz
+        x += th * dx
+        z += th * dz
         mu = np.dot(x.T, z) / n
         # adjust...
         delta = 1
@@ -53,3 +53,10 @@ def pdpfm(c, A, b, beta=0.5, precision=0.001, MEPS=1e-10):
         return pos, pov
     else:
         return print('Infeasible', end='\n')
+
+
+if __name__ == '__main__':
+    c = np.array([[150], [200], [300]])
+    A = np.array([[3, 1, 2], [1, 3, 0], [0, 2, 4]])
+    b = np.array([[60], [36], [48]])
+    pdpfm(c, A, b)
