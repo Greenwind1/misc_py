@@ -24,10 +24,10 @@ plt.style.use('ggplot')
 
 c_true = [0.3, -1.5, 1.2, 1.5, 0]
 
-x = np.linspace(0, 3.5, 100, endpoint=False)
+x = np.linspace(0, 3.5, 200, endpoint=False)
 y = np.polyval(c_true, x)
 
-x_h = np.linspace(2, 4.5, 50, endpoint=False)
+x_h = np.linspace(2, 4.5, 200, endpoint=False)
 y_h = np.polyval(c_true, x_h)
 
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -41,8 +41,8 @@ ax.legend()
 fig.show()
 fig.savefig('./bias-variance/poly.png', dpi=220)
 
-y += np.random.normal(0, 0.7, len(y)) + np.random.normal(1, 0.2, len(y))
-y_h += np.random.normal(0, 0.7, len(y_h)) + np.random.normal(1, 0.2, len(y_h))
+y += np.random.normal(0, 0.7, len(y))
+y_h += np.random.normal(0, 0.7, len(y_h))
 
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.plot(x, y, '.', color='deeppink', markeredgecolor=None,
@@ -107,64 +107,77 @@ fig.show()
 fig.savefig('./bias-variance/polyfit-w-penalty.png', dpi=220)
 
 # committee
-n_boot = 200
-# poly = [3, 4, 5, 9]
-poly = [3]
+n_samp = 5000
+n_boot = 500
+samp_rate = 0.2
+poly = [3, 4, 5, 9]
+# poly = [3]
 np.random.seed(2019)
+
+x_samp = np.random.uniform(0, 3.5, n_samp)
+y_samp = np.polyval(c_true, x_samp)
+y_samp += np.random.normal(0, 0.7, n_samp)  # SD = 0.7
+
 for p, c in zip(poly, col):
+
+    noise = 0
+    loss = 0
+
     fig, ax = plt.subplots(1, 2, figsize=(10, 7))
     axes = ax.ravel()
-    axes[0].plot(x, y,
-                 '.', color='deeppink', markeredgecolor=None, alpha=0.5,
+    axes[0].plot(x_samp, y_samp,
+                 '.', color='deeppink', markersize=0.5,
+                 markeredgecolor=None, alpha=0.5,
                  label='train')
     axes[1].plot(x_h, y_h,
                  '.', color='darkcyan', markeredgecolor=None, alpha=0.5,
                  label='test')
-    y_ave_tr = np.zeros(len(x))
-    y_tr_df = pd.DataFrame({'y_train_true': np.polyval(c_true, x)})
-    y_ave_te = np.zeros(len(x_h))
-    for b in range(n_boot):
-        samp = np.random.choice(range(len(x)), int(0.5 * len(x)))
-        samp = np.sort(samp)
-        cc = np.polyfit(x[samp], y[samp], p)
-        y_tr = np.polyval(cc, x[samp])
-        y_ave_tr += np.polyval(cc, x) / n_boot
-        y_te = np.polyval(cc, x_h)
-        y_tr_df['y_train_{}'.format(b)] = np.polyval(cc, x)
-        y_ave_te += y_te / n_boot
-        axes[0].plot(x[samp], y_tr, '-', color=c, alpha=0.05)
-        axes[1].plot(x_h, y_te, '-', color=c, alpha=0.05)
-
-    # loss = ((y_tr_df.iloc[:, 1:].values - y_tr_df[
-    #     'y_train_true'].values.reshape(-1, 1)) ** 2 / len(
-    #     x) / n_boot).sum().sum()
-    loss = ((y_tr_df.iloc[:, 1:].values - y.reshape(-1, 1)) ** 2 / len(
-        x) / n_boot).sum().sum()
-
-    bias2 = ((y_ave_tr - y_tr_df['y_train_true']) ** 2 / len(x)).sum()
-    variance = ((y_tr_df.iloc[:, 1:].values - y_ave_tr.reshape(-1, 1)) ** 2 /
-                len(x) / n_boot).sum().sum()
-    noise = ((y_tr_df['y_train_true'].values - y) ** 2 / len(x)).sum()
-
-    eq_str = 'LOSS = BIAS^2 + VARIANCE + NOISE' + \
-             '\n{:.3f} = {:.3f} + {:.3f}+ {:.3f}'.format(
-                 loss, bias2, variance, noise)
-    print(eq_str)
-
-    axes[0].plot(x, y_ave_tr, '-', color=c, alpha=1)
-    axes[1].plot(x_h, y_ave_te, '-', color=c, alpha=1)
     axes[0].set_ylim(-3, 3.5)
-    axes[1].set_ylim(-1.5, 2.75)
+    axes[1].set_ylim(-3, 3.5)
+
+    y_ave_tr = np.zeros(len(x_samp))
+    y_tr_df = pd.DataFrame({'y_train_true': np.polyval(c_true, x_samp)})
+    y_ave_te = np.zeros(len(x_h))
+
+    for b in range(n_boot):
+        samp = np.random.choice(range(len(x_samp)),
+                                int(samp_rate * len(x_samp)),
+                                replace=False)
+        samp = np.sort(samp)
+        cc = np.polyfit(x_samp[samp], y_samp[samp], p)
+        y_tr = np.polyval(cc, x_samp[samp])
+        y_ave_tr += np.polyval(cc, x_samp) / n_boot
+        y_te = np.polyval(cc, x_h)
+        y_tr_df['y_train_{}'.format(b)] = np.polyval(cc, x_samp)
+        y_ave_te += y_te / n_boot
+        # axes[0].plot(x_samp[samp], y_tr,
+        #              '-', color=c, alpha=0.1, linewidth=0.5)
+        axes[1].plot(x_h, y_te, '-', color=c, alpha=0.1, linewidth=0.5)
+
+        noise += ((y_tr_df['y_train_true'].values - y_samp) ** 2).mean()
+        loss += ((np.polyval(cc, x_samp) - y_samp) ** 2).mean()
+
+    loss /= n_boot
+    noise /= n_boot
+    bias2 = ((y_ave_tr - y_tr_df['y_train_true']) ** 2).mean()
+    variance = ((y_tr_df.iloc[:, 1:].values - y_ave_tr.reshape(-1, 1)) **
+                2).mean().mean()
+    eq_str = 'LOSS = {:.4f}\nBIAS^2 + VARIANCE + NOISE = LOSS'.format(loss) + \
+             '\n{:.4f} + {:.4f}+ {:.4f} = {:.4f}'.format(
+                 bias2, variance, noise, bias2 + variance + noise)
+    print(eq_str)  # wired...
+
+    title_sqr = 'BIAS^2 : {:.4f}\nVARIANCE : {:.4f}\nNOISE : {:.4f}'.format(
+        bias2, variance, noise)
+    axes[0].plot(x_samp, y_ave_tr, '.', color=c,
+                 alpha=0.1, markersize=0.3, markeredgecolor=None)
+    axes[1].plot(x_h, y_ave_te, '--', color=c, alpha=1, linewidth=3)
     axes[0].legend()
     axes[1].legend()
-
-    # TODO : bias and variance => train
-    axes[0].set_title('mse : {:.3f}\n{}'.format(
-        mean_squared_error(y, y_ave_tr), eq_str), fontsize=8)
+    axes[0].set_title('{}'.format(title_sqr), fontsize=10)
     axes[1].set_title('mse : {:.3f}'.format(
         mean_squared_error(y_h, y_ave_te)), fontsize=10)
-    fig.suptitle('poly {} fit with bootstrap'.format(p),
-                 fontsize=15)
+    fig.suptitle('poly {} fit with bootstrap'.format(p), fontsize=15)
     fig.show()
     fig.savefig('./bias-variance/poly{}fit-w-bootstrap.png'.format(p),
                 dpi=220)
