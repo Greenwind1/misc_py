@@ -1,12 +1,15 @@
-import numpy as np
+import os
+
+os.chdir('ctrNet')
+
 import pandas as pd
 import tensorflow as tf
 from ctrNet import ctrNet
 from sklearn.model_selection import train_test_split
+from sklearn import metrics
 from ctrNet.src import misc_utils as utils
-import os
 
-train_df = pd.read_csv('./ctrNet/data/train_small.txt', header=None, sep='\t')
+train_df = pd.read_csv('data/train_small.txt', header=None, sep='\t')
 train_df.columns = ['label'] + ['f' + str(i) for i in range(39)]
 train_df, dev_df, _, _ = train_test_split(train_df, train_df, test_size=0.1,
                                           random_state=2019)
@@ -14,7 +17,9 @@ dev_df, test_df, _, _ = train_test_split(dev_df, dev_df, test_size=0.5,
                                          random_state=2019)
 features = ['f' + str(i) for i in range(39)]
 
+# -------------------------------------------------------------------
 # FM
+# -------------------------------------------------------------------
 hparam = tf.contrib.training.HParams(
     model='fm',  # ['fm','ffm','nffm']
     k=16,
@@ -37,19 +42,21 @@ os.environ["CUDA_DEVICE_ORDER"] = 'PCI_BUS_ID'
 os.environ["CUDA_VISIBLE_DEVICES"] = '7'
 model = ctrNet.build_model(hparam)
 print("Testing FM....")
-model.train(train_data=(train_df[features], train_df['label']), \
+model.train(train_data=(train_df[features], train_df['label']),
             dev_data=(dev_df[features], dev_df['label']))
-from sklearn import metrics
 
 preds = model.infer(dev_data=(test_df[features], test_df['label']))
-fpr, tpr, thresholds = metrics.roc_curve(test_df['label'] + 1, preds,
+fpr, tpr, thresholds = metrics.roc_curve(test_df['label'] + 1,
+                                         preds,
                                          pos_label=2)
 auc = metrics.auc(fpr, tpr)
 print(auc)
 
 print("FM Done....")
 
+# -------------------------------------------------------------------
 # FFM
+# -------------------------------------------------------------------
 hparam = tf.contrib.training.HParams(
     model='ffm',  # ['fm','ffm','nffm']
     k=16,
@@ -73,7 +80,6 @@ model = ctrNet.build_model(hparam)
 print("Testing FFM....")
 model.train(train_data=(train_df[features], train_df['label']), \
             dev_data=(dev_df[features], dev_df['label']))
-from sklearn import metrics
 
 preds = model.infer(dev_data=(test_df[features], test_df['label']))
 fpr, tpr, thresholds = metrics.roc_curve(test_df['label'] + 1, preds,
@@ -83,7 +89,9 @@ print(auc)
 
 print("FFM Done....")
 
+# -------------------------------------------------------------------
 # NFFM
+# -------------------------------------------------------------------
 hparam = tf.contrib.training.HParams(
     model='nffm',
     norm=True,
@@ -122,7 +130,9 @@ print(auc)
 
 print("NFFM Done....")
 
+# -------------------------------------------------------------------
 # Xdeepfm
+# -------------------------------------------------------------------
 hparam = tf.contrib.training.HParams(
     model='xdeepfm',
     norm=True,

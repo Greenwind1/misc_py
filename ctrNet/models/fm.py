@@ -1,7 +1,5 @@
 import tensorflow as tf
 from ctrNet.src import misc_utils as utils
-from tensorflow.python.ops import lookup_ops
-from tensorflow.python.layers import core as layers_core
 from ctrNet.models.base_model import BaseModel
 import numpy as np
 import time
@@ -21,7 +19,7 @@ class Model(BaseModel):
         utils.print_out("# Trainable variables")
         for param in params:
             utils.print_out("  %s, %s, %s" % (
-            param.name, str(param.get_shape()), param.op.device))
+                param.name, str(param.get_shape()), param.op.device))
 
     def set_Session(self, sess):
         self.sess = sess
@@ -56,7 +54,7 @@ class Model(BaseModel):
         mask_input = tf.boolean_mask(emb_inp_v2, mask)
         mask_input = tf.reshape(mask_input, [tf.shape(emb_inp_v2)[0],
                                              hparams.feature_nums * (
-                                                         hparams.feature_nums - 1) // 2])
+                                                     hparams.feature_nums - 1) // 2])
 
         w2 = tf.reduce_sum(mask_input, -1)
 

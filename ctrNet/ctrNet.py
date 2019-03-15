@@ -1,10 +1,8 @@
-from ctrNet.src import misc_utils as utils
 from ctrNet.models import fm
 from ctrNet.models import ffm
 from ctrNet.models import nffm
 from ctrNet.models import xdeepfm
 import tensorflow as tf
-from imp import reload
 
 
 def build_model(hparams):
