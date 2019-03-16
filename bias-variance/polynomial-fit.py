@@ -22,6 +22,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 plt.style.use('ggplot')
 
+SEED = 2019
+
+np.random.seed(SEED)
 c_true = [0.3, -1.5, 1.2, 1.5, 0]
 
 x = np.linspace(0, 3.5, 200, endpoint=False)
@@ -56,7 +59,7 @@ fig.show()
 fig.savefig('./bias-variance/poly-w-gauss.png', dpi=220)
 
 # polynomial fitting
-poly = [3, 4, 5, 9]
+poly = [3, 4, 6, 9]
 col = ['darkslateblue', 'dimgray', 'darkorange', 'limegreen']
 
 fig, ax = plt.subplots(1, 2, figsize=(10, 5))
@@ -70,7 +73,7 @@ for p, c in zip(poly, col):
     y_tr = np.polyval(coef, x)
     y_te = np.polyval(coef, x_h)
     axes[0].plot(x, y_tr, '-', color=c, alpha=0.9,
-                 label='poly{} mse : {:.2f}'.format(
+                 label='poly{} mse : {:.4f}'.format(
                      len(coef) - 1, mean_squared_error(y, y_tr)))
     axes[1].plot(x_h, y_te, '-', color=c, alpha=0.9,
                  label='poly{} mse : {:.2f}'.format(
@@ -93,9 +96,11 @@ for p, c in zip(poly, col):
     y_tr = np.polyval(coef, x)
     y_te = np.polyval(coef, x_h)
     rmse_tr = mean_squared_error(y, y_tr)
-    rmse_tr += + np.dot(coef[:-1], coef[:-1]) / len(x)
+    rmse_tr += np.dot(coef[:-1], coef[:-1]) / len(x)
+    # rmse_tr += np.sum(np.abs(coef[:-1])) / len(x)
+    print(np.sum(np.abs(coef[:-1])) / len(x))
     axes[0].plot(x, y_tr, '-', color=c, alpha=0.9,
-                 label='poly{} mse+penalty : {:.2f}'.format(
+                 label='poly{} mse+penalty : {:.4f}'.format(
                      len(coef) - 1, rmse_tr))
     axes[1].plot(x_h, y_te, '-', color=c, alpha=0.9,
                  label='poly{} mse : {:.2f}'.format(
@@ -110,7 +115,7 @@ fig.savefig('./bias-variance/polyfit-w-penalty.png', dpi=220)
 n_samp = 5000
 n_boot = 500
 samp_rate = 0.2
-poly = [3, 4, 5, 9]
+poly = [3, 4, 6, 9]
 # poly = [3]
 np.random.seed(2019)
 
