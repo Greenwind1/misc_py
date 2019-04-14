@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import gc
 import os
+import gc
+import sys
 import warnings
 import psutil
 import json
@@ -20,3 +21,4 @@ pd.options.mode.chained_assignment = None
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 plt.style.use('ggplot')
+sys.path.append('')
